@@ -4,21 +4,29 @@ __all__ = ["svd"]
 
 
 def star(A: np.ndarray):
+    """conjugate transpose
+    For the notation A^* (A' in matlab)
+    """
     return A.conj().T
+
+
+def eigenv(A: np.ndarray):
+    """computes the eigen values (not multiples) and eigen vectors of A"""
+    return np.linalg.eig(A)
 
 
 def svd(A: np.ndarray):
     (m, n) = A.shape
 
-    #  A' @ A
+    #  A^* @ A
     if m > n:
-        S_2, V = np.linalg.eig(star(A) @ A)
+        S_2, V = eigenv(star(A) @ A)
         S = np.sqrt(S_2)
         U = A @ V / S
 
-    #  A @ A'
+    #  A @ A^*
     else:
-        S_2, U = np.linalg.eig(A @ star(A))
+        S_2, U = eigenv(A @ star(A))
         S = np.sqrt(S_2)
         V = star(A) @ U / S
 
